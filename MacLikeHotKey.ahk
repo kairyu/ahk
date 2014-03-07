@@ -1,3 +1,5 @@
+SetTitleMatchMode, RegEx
+
 global Magic := 0
 
 IsExcludeTarget()
@@ -81,7 +83,7 @@ MagicKey(key)
 		Send ^x
 		Return
 	}
-	Return %key%
+	Return "^{%key%}"
 }
 
 InputLangChangeBackward()
@@ -99,6 +101,8 @@ InputLangChangeForward()
 GroupAdd, ExcludeGroup, ahk_class Vim
 GroupAdd, ExcludeGroup, ahk_class PuTTY
 GroupAdd, ExcludeGroup, ahk_class mintty
+GroupAdd, ExcludeGroup, ahk_class QWidget
+GroupAdd, ExcludeGroup, ^.* - Microsoft Visual Studio.*$ ahk_class ^HwndWrapper\[DefaultDomain;;.*\]$
 ;GroupAdd, ExcludeGroup, ahk_class Chrome_WidgetWin_1
 
 ;; Use Win as Ctrl
@@ -150,7 +154,7 @@ $Space::SendKey(A_ThisHotKey)
 
 ; Paste for Vim
 #IfWinActive ahk_class Vim
-$<#v::SendInput {Raw}%clipboard%
+$<#v::Send ^O"{+}gP
 #IfWinActive
 
 ; Copy and paste for PuTTY
