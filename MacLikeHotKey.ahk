@@ -2,33 +2,15 @@ SetTitleMatchMode, RegEx
 
 global Magic := 0
 
-IsExcludeTarget()
-{
-	IfWinActive, ahk_class Vim
-		Return 1
-	IfWinActive, ahk_class PuTTY
-		Return 1
-	IfWinActive, ahk_class mintty
-		Return 1
-	Return 0
-}
 
 SendKey(key)
 {
 	StringReplace, key, key, *
 	StringReplace, key, key, $
-	global Magic, CtrlState, AltState, ShiftState, WinState
+	global Magic
 	key = {%key%}
 	If (Magic)
 		key := MagicKey(key)
-	If (CtrlState)
-		key = ^%key%
-	If (AltState)
-		key = !%key%
-	If (ShiftState)
-		key = +%key%
-	If (WinState)
-		key = #%key%
 	;MsgBox, %key%
 	Send {Blind}%key%
 	Return
@@ -83,7 +65,8 @@ MagicKey(key)
 		Send ^x
 		Return
 	}
-	Return "^{%key%}"
+	key = ^%key%
+	Return key
 }
 
 InputLangChangeBackward()
@@ -148,8 +131,9 @@ $*y::SendKey(A_ThisHotKey)
 $*z::SendKey(A_ThisHotKey)
 $*[::SendKey(A_ThisHotKey)
 $*]::SendKey(A_ThisHotKey)
+$*`::SendKey(A_ThisHotKey)
 $*Esc::SendKey(A_ThisHotKey)
-$Space::SendKey(A_ThisHotKey)
+$*Space::SendKey(A_ThisHotKey)
 #IfWinNotActive
 
 ; Paste for Vim
@@ -183,7 +167,7 @@ $<#v::Send +{Insert}
 #IfWinActive ahk_group ExcludeGroup
 $<#Space::InputLangChangeForward()
 $^Space::Send #^{Space}
-#IfWinNotActive
+#IfWinActive
 
 ; Some more remaps
 #IfWinNotActive ahk_group ExcludeGroup
