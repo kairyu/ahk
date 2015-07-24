@@ -89,9 +89,13 @@ InputLangChangeForward()
 GroupAdd, ExcludeGroup, ahk_class Vim
 GroupAdd, ExcludeGroup, ahk_class PuTTY
 GroupAdd, ExcludeGroup, ahk_class mintty
-GroupAdd, ExcludeGroup, ahk_class QWidget
+;GroupAdd, ExcludeGroup, ahk_class QWidget
 GroupAdd, ExcludeGroup, ^.* - Microsoft Visual Studio.*$ ahk_class ^HwndWrapper\[DefaultDomain;;.*\]$
+GroupAdd, ExcludeGroup, ahk_class TscShellContainerClass ; Remote Desktop
 ;GroupAdd, ExcludeGroup, ahk_class Chrome_WidgetWin_1
+GroupAdd, ExcludeGroup, ahk_class CEFCLIENT ; Brackets
+GroupAdd, ExcludeGroup, ahk_class SWT_Window0 ; Eclipse
+GroupAdd, ExcludeGroup, ahk_class SunAwtFrame ; IntelliJ IDEA
 
 ;; Use Win as Ctrl
 LWin::LCtrl
