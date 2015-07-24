@@ -1,15 +1,14 @@
+#InstallKeybdHook
+
 SetTitleMatchMode, RegEx
-
-global Magic := 0
-
 
 SendKey(key)
 {
 	StringReplace, key, key, *
 	StringReplace, key, key, $
-	global Magic
+	GetKeyState, Magic, LCtrl, P
 	key = {%key%}
-	If (Magic)
+	If Magic = D
 		key := MagicKey(key)
 	;MsgBox, %key%
 	Send {Blind}%key%
@@ -98,10 +97,9 @@ GroupAdd, ExcludeGroup, ahk_class SWT_Window0 ; Eclipse
 GroupAdd, ExcludeGroup, ahk_class SunAwtFrame ; IntelliJ IDEA
 
 ;; Use Win as Ctrl
-LWin::LCtrl
+*LWin::LCtrl
 #IfWinNotActive ahk_group ExcludeGroup
-LCtrl::Magic := 1
-LCtrl Up::Magic := 0
+*LCtrl::Return
 $*1::SendKey(A_ThisHotKey)
 $*2::SendKey(A_ThisHotKey)
 $*3::SendKey(A_ThisHotKey)
