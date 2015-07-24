@@ -65,6 +65,11 @@ MagicKey(key)
 		Send ^x
 		Return
 	}
+	Else If (key = "{c}")
+	{
+		Send {Ctrl Down}{c}{Ctrl Up}
+		Return
+	}
 	key = ^%key%
 	Return key
 }
