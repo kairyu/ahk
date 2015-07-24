@@ -7,9 +7,12 @@ SendKey(key)
 	StringReplace, key, key, *
 	StringReplace, key, key, $
 	GetKeyState, Magic, LCtrl, P
+	GetKeyState, Ctrl, LWin, P
 	key = {%key%}
 	If Magic = D
 		key := MagicKey(key)
+	If Ctrl = D
+		key := CtrlKey(key)
 	;MsgBox, %key%
 	Send {Blind}%key%
 	Return
@@ -67,6 +70,18 @@ MagicKey(key)
 	Else If (key = "{c}")
 	{
 		Send {Ctrl Down}{c}{Ctrl Up}
+		Return
+	}
+	key = ^%key%
+	Return key
+}
+
+CtrlKey(key)
+{
+	StringReplace, key, key, ^
+	If (key = "{Space}")
+	{
+		InputLangChangeForward()
 		Return
 	}
 	key = ^%key%
@@ -167,10 +182,6 @@ $<#v::Send +{Insert}
 #IfWinActive
 
 ; Switch IME
-#IfWinNotActive ahk_group ExcludeGroup
-^Space::InputLangChangeForward()
-#IfWinNotActive
-
 #IfWinActive ahk_group ExcludeGroup
 $<#Space::InputLangChangeForward()
 $^Space::Send #^{Space}
