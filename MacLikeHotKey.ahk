@@ -1,8 +1,25 @@
 #InstallKeybdHook
 
 SetTitleMatchMode, RegEx
+Global Magic, Ctrl
 
-SendKey(key)
+SendKeyDown(key)
+{
+	StringReplace, key, key, *
+	StringReplace, key, key, $
+	GetKeyState, Magic, LCtrl, P
+	GetKeyState, Ctrl, LWin, P
+	key = {%key% down}
+	If Magic = D
+		key := MagicKeyDown(key)
+	If Ctrl = D
+		key := CtrlKey(key)
+	;MsgBox, %key%
+	SendInput {Blind}%key%
+	Return
+}
+
+SendKeyUp(key)
 {
 	StringReplace, key, key, *
 	StringReplace, key, key, $
@@ -10,43 +27,42 @@ SendKey(key)
 	GetKeyState, Ctrl, LWin, P
 	key = {%key%}
 	If Magic = D
-		key := MagicKey(key)
+		key := MagicKeyUp(key)
 	If Ctrl = D
 		key := CtrlKey(key)
 	;MsgBox, %key%
-	Send {Blind}%key%
+	SendInput {Blind}%key%
 	Return
 }
 
-MagicKey(key)
+MagicKeyDown(key)
 {
-	If (key = "{p}")
-		Return "{Up}"
-	Else If (key = "{n}")
-		Return "{Down}"
-	Else If (key = "{b}")
-		Return "{Left}"
-	Else If (key = "{f}")
-		Return "{Right}"
-	Else If (key = "{a}")
-		Return "{Home}"
-	Else If (key = "{e}")
-		Return "{End}"
-	Else If (key = "{[}")
-		Return "{ESC}"
-	Else If (key = "{d}")
-		Return "{DEL}"
-	Else If (key = "{h}")
-		Return "{BS}"
-	Else If (key = "{i}")
-		Return "{Tab}"
-	Else If (key = "{j}")
-		Return "{Return}"
-	Else If (key = "{m}")
-		Return "{Return}"
-	Else If (key = "{Space}")
-		Return "^#{Space}"
-	Else If (key = "{w}")
+	;MsgBox, %key%
+	If (key = "{p down}")
+		Return "{Up down}"
+	Else If (key = "{n down}")
+		Return "{Down down}"
+	Else If (key = "{b down}")
+		Return "{Left down}"
+	Else If (key = "{f down}")
+		Return "{Right down}"
+	Else If (key = "{a down}")
+		Return "{Home down}"
+	Else If (key = "{e down}")
+		Return "{End down}"
+	Else If (key = "{[ down}")
+		Return "{ESC down}"
+	Else If (key = "{d down}")
+		Return "{DEL down}"
+	Else If (key = "{h down}")
+		Return "{BS down}"
+	Else If (key = "{i down}")
+		Return "{Tab down}"
+	Else If (key = "{j down}")
+		Return "{Return down}"
+	Else If (key = "{m down}")
+		Return "{Return down}"
+	Else If (key = "{w down}")
 	{
 		Send {Ctrl Down}{Shift Down}{Left}{Shift Up}{Ctrl Up}
 		Sleep, 10
@@ -72,6 +88,45 @@ MagicKey(key)
 		Send {Ctrl Down}{c}{Ctrl Up}
 		Return
 	}
+	key = ^%key%
+	Return key
+}
+
+MagicKeyUp(key)
+{
+	;MsgBox, %key%
+	If (key = "{p up}")
+		Return "{Up up}"
+	Else If (key = "{n up}")
+		Return "{Down up}"
+	Else If (key = "{b up}")
+		Return "{Left up}"
+	Else If (key = "{f up}")
+		Return "{Right up}"
+	Else If (key = "{a up}")
+		Return "{Home up}"
+	Else If (key = "{e up}")
+		Return "{End up}"
+	Else If (key = "{[ up}")
+		Return "{ESC up}"
+	Else If (key = "{d up}")
+		Return "{DEL up}"
+	Else If (key = "{h up}")
+		Return "{BS up}"
+	Else If (key = "{i up}")
+		Return "{Tab up}"
+	Else If (key = "{j up}")
+		Return "{Return up}"
+	Else If (key = "{m up}")
+		Return "{Return up}"
+	Else If (key = "{w up}")
+		Return
+	Else If (key = "{u up}")
+		Return
+	Else If (key = "{k up}")
+		Return
+	Else If (key = "{c up}")
+		Return
 	key = ^%key%
 	Return key
 }
@@ -109,62 +164,126 @@ GroupAdd, ExcludeGroup, ahk_class TscShellContainerClass ; Remote Desktop
 ;GroupAdd, ExcludeGroup, ahk_class Chrome_WidgetWin_1
 GroupAdd, ExcludeGroup, ahk_class CEFCLIENT ; Brackets
 GroupAdd, ExcludeGroup, ahk_class SWT_Window0 ; Eclipse
-GroupAdd, ExcludeGroup, ahk_class SunAwtFrame ; IntelliJ IDEA
+;GroupAdd, ExcludeGroup, ahk_class SunAwtFrame ; IntelliJ IDEA
+GroupAdd, ExcludeGroup, ahk_class VirtualConsoleClass ; ConEmu
+GroupAdd, ExcludeGroup, ahk_class ConsoleWindowClass ; CMD
+GroupAdd, ExcludeGroup, ahk_exe devenv.exe ; Microsoft Visual Studio
+GroupAdd, ExcludeGroup, ahk_exe nvim-qt.exe ; NeoVim QT
+GroupAdd, ExcludeGroup, ahk_exe Oni.exe ; Oni
+GroupAdd, ExcludeGroup, ahk_exe MousewithoutBordersHelper.exe ; Mouse Without Boarders
 
 ;; Use Win as Ctrl
 *LWin::LCtrl
 #IfWinNotActive ahk_group ExcludeGroup
 *LCtrl::Return
-$*1::SendKey(A_ThisHotKey)
-$*2::SendKey(A_ThisHotKey)
-$*3::SendKey(A_ThisHotKey)
-$*4::SendKey(A_ThisHotKey)
-$*5::SendKey(A_ThisHotKey)
-$*6::SendKey(A_ThisHotKey)
-$*7::SendKey(A_ThisHotKey)
-$*8::SendKey(A_ThisHotKey)
-$*9::SendKey(A_ThisHotKey)
-$*0::SendKey(A_ThisHotKey)
-$*a::SendKey(A_ThisHotKey)
-$*b::SendKey(A_ThisHotKey)
-$*c::SendKey(A_ThisHotKey)
-$*d::SendKey(A_ThisHotKey)
-$*e::SendKey(A_ThisHotKey)
-$*f::SendKey(A_ThisHotKey)
-$*g::SendKey(A_ThisHotKey)
-$*h::SendKey(A_ThisHotKey)
-$*i::SendKey(A_ThisHotKey)
-$*j::SendKey(A_ThisHotKey)
-$*k::SendKey(A_ThisHotKey)
-$*l::SendKey(A_ThisHotKey)
-$*m::SendKey(A_ThisHotKey)
-$*n::SendKey(A_ThisHotKey)
-$*o::SendKey(A_ThisHotKey)
-$*p::SendKey(A_ThisHotKey)
-$*q::SendKey(A_ThisHotKey)
-$*r::SendKey(A_ThisHotKey)
-$*s::SendKey(A_ThisHotKey)
-$*t::SendKey(A_ThisHotKey)
-$*u::SendKey(A_ThisHotKey)
-$*v::SendKey(A_ThisHotKey)
-$*w::SendKey(A_ThisHotKey)
-$*x::SendKey(A_ThisHotKey)
-$*y::SendKey(A_ThisHotKey)
-$*z::SendKey(A_ThisHotKey)
-$*[::SendKey(A_ThisHotKey)
-$*]::SendKey(A_ThisHotKey)
-$*`::SendKey(A_ThisHotKey)
-$*Esc::SendKey(A_ThisHotKey)
-$*Space::SendKey(A_ThisHotKey)
+;If Ctrl = D
+{
+$*1::SendKeyDown(A_ThisHotKey)
+$*2::SendKeyDown(A_ThisHotKey)
+$*3::SendKeyDown(A_ThisHotKey)
+$*4::SendKeyDown(A_ThisHotKey)
+$*5::SendKeyDown(A_ThisHotKey)
+$*6::SendKeyDown(A_ThisHotKey)
+$*7::SendKeyDown(A_ThisHotKey)
+$*8::SendKeyDown(A_ThisHotKey)
+$*9::SendKeyDown(A_ThisHotKey)
+$*0::SendKeyDown(A_ThisHotKey)
+$*a::SendKeyDown(A_ThisHotKey)
+$*b::SendKeyDown(A_ThisHotKey)
+$*c::SendKeyDown(A_ThisHotKey)
+$*d::SendKeyDown(A_ThisHotKey)
+$*e::SendKeyDown(A_ThisHotKey)
+$*f::SendKeyDown(A_ThisHotKey)
+$*g::SendKeyDown(A_ThisHotKey)
+$*h::SendKeyDown(A_ThisHotKey)
+$*i::SendKeyDown(A_ThisHotKey)
+$*j::SendKeyDown(A_ThisHotKey)
+$*k::SendKeyDown(A_ThisHotKey)
+$*l::SendKeyDown(A_ThisHotKey)
+$*m::SendKeyDown(A_ThisHotKey)
+$*n::SendKeyDown(A_ThisHotKey)
+$*o::SendKeyDown(A_ThisHotKey)
+$*p::SendKeyDown(A_ThisHotKey)
+$*q::SendKeyDown(A_ThisHotKey)
+$*r::SendKeyDown(A_ThisHotKey)
+$*s::SendKeyDown(A_ThisHotKey)
+$*t::SendKeyDown(A_ThisHotKey)
+$*u::SendKeyDown(A_ThisHotKey)
+$*v::SendKeyDown(A_ThisHotKey)
+$*w::SendKeyDown(A_ThisHotKey)
+$*x::SendKeyDown(A_ThisHotKey)
+$*y::SendKeyDown(A_ThisHotKey)
+$*z::SendKeyDown(A_ThisHotKey)
+$*[::SendKeyDown(A_ThisHotKey)
+$*]::SendKeyDown(A_ThisHotKey)
+$*`::SendKeyDown(A_ThisHotKey)
+$*Esc::SendKeyDown(A_ThisHotKey)
+$*Space::SendKeyDown(A_ThisHotKey)
+$*Backspace::SendKeyDown(A_ThisHotKey)
+$*Enter::SendKeyDown(A_ThisHotKey)
+
+$*1 up::SendKeyUp(A_ThisHotKey)
+$*2 up::SendKeyUp(A_ThisHotKey)
+$*3 up::SendKeyUp(A_ThisHotKey)
+$*4 up::SendKeyUp(A_ThisHotKey)
+$*5 up::SendKeyUp(A_ThisHotKey)
+$*6 up::SendKeyUp(A_ThisHotKey)
+$*7 up::SendKeyUp(A_ThisHotKey)
+$*8 up::SendKeyUp(A_ThisHotKey)
+$*9 up::SendKeyUp(A_ThisHotKey)
+$*0 up::SendKeyUp(A_ThisHotKey)
+$*a up::SendKeyUp(A_ThisHotKey)
+$*b up::SendKeyUp(A_ThisHotKey)
+$*c up::SendKeyUp(A_ThisHotKey)
+$*d up::SendKeyUp(A_ThisHotKey)
+$*e up::SendKeyUp(A_ThisHotKey)
+$*f up::SendKeyUp(A_ThisHotKey)
+$*g up::SendKeyUp(A_ThisHotKey)
+$*h up::SendKeyUp(A_ThisHotKey)
+$*i up::SendKeyUp(A_ThisHotKey)
+$*j up::SendKeyUp(A_ThisHotKey)
+$*k up::SendKeyUp(A_ThisHotKey)
+$*l up::SendKeyUp(A_ThisHotKey)
+$*m up::SendKeyUp(A_ThisHotKey)
+$*n up::SendKeyUp(A_ThisHotKey)
+$*o up::SendKeyUp(A_ThisHotKey)
+$*p up::SendKeyUp(A_ThisHotKey)
+$*q up::SendKeyUp(A_ThisHotKey)
+$*r up::SendKeyUp(A_ThisHotKey)
+$*s up::SendKeyUp(A_ThisHotKey)
+$*t up::SendKeyUp(A_ThisHotKey)
+$*u up::SendKeyUp(A_ThisHotKey)
+$*v up::SendKeyUp(A_ThisHotKey)
+$*w up::SendKeyUp(A_ThisHotKey)
+$*x up::SendKeyUp(A_ThisHotKey)
+$*y up::SendKeyUp(A_ThisHotKey)
+$*z up::SendKeyUp(A_ThisHotKey)
+$*[ up::SendKeyUp(A_ThisHotKey)
+$*] up::SendKeyUp(A_ThisHotKey)
+$*` up::SendKeyUp(A_ThisHotKey)
+$*Esc up::SendKeyUp(A_ThisHotKey)
+$*Space up::SendKeyUp(A_ThisHotKey)
+$*Backspace up::SendKeyUp(A_ThisHotKey)
+$*Enter up::SendKeyUp(A_ThisHotKey)
+}
 #IfWinNotActive
 
-; Paste for Vim
+sc07D::\
+
+; Copy and paste for GVim
 #IfWinActive ahk_class Vim
-$<#v::Send ^O"{+}gP
+$<#c::Send ^{Insert}
+$<#v::Send +{Insert}
 #IfWinActive
 
 ; Copy and paste for PuTTY
 #IfWinActive ahk_class PuTTY
+$<#c::Send ^{Insert}
+$<#v::Send +{Insert}
+#IfWinActive
+
+; Copy and paste for ConEmu
+#IfWinActive ahk_class VirtualConsoleClass
 $<#c::Send ^{Insert}
 $<#v::Send +{Insert}
 #IfWinActive
@@ -176,15 +295,20 @@ $<#v::Send +{Insert}
 #IfWinActive
 
 ; Copy and paste for CMD
+;#IfWinActive ahk_class ConsoleWindowClass
+;^c::Send !{Space}ek
+;^v::Send !{Space}ep
+;#IfWinActive
+
+; Copy and paste for CMD w/ clink
 #IfWinActive ahk_class ConsoleWindowClass
-^c::Send !{Space}ek
-^v::Send !{Space}ep
+$<#v::Send ^v
 #IfWinActive
 
 ; Switch IME
 #IfWinActive ahk_group ExcludeGroup
 $<#Space::InputLangChangeForward()
-$^Space::Send #^{Space}
+;$^Space::Send !{Space}
 #IfWinActive
 
 ; Some more remaps
